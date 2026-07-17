@@ -1,0 +1,292 @@
+/* ==========================================================================
+   VulnLab - shared stylesheet
+   Consolidated from index.html, login.html, search.html, dashboard.html
+
+   Design language: terminal / hacking-lab. Amber = interactive, red =
+   danger/admin/vuln, green = hints & lab notes. Panels read as terminal
+   windows via a CSS-only title bar (no markup changes required).
+   ========================================================================== */
+
+:root {
+  /* ---- palette ---- */
+  --bg: #0b0e14;
+  --bg-scanline: #0e121a;
+  --panel: #131720;
+  --panel-raised: #171c26;
+  --border: #262b36;
+  --border-bright: #3a4152;
+
+  --text: #d8deed;
+  --text-dim: #7b8394;
+
+  --amber: #f2a93b;
+  --amber-dim: #8a641f;
+  --red: #ff5c5c;
+  --red-dim: #7a2b2b;
+  --green: #4fd1a5;
+  --green-dim: #245f4c;
+
+  /* ---- type ---- */
+  --font-mono: ui-monospace, "IBM Plex Mono", "SFMono-Regular", Menlo,
+    Consolas, monospace;
+  --font-body: ui-sans-serif, "IBM Plex Sans", "Segoe UI", system-ui,
+    sans-serif;
+
+  --radius: 6px;
+}
+
+/* ---- base ---- */
+body {
+  font-family: var(--font-body);
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 20px 60px;
+  background: var(--bg);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--bg-scanline) 0,
+    var(--bg-scanline) 1px,
+    var(--bg) 1px,
+    var(--bg) 3px
+  );
+  color: var(--text);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--amber);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+h1, h2 {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  color: var(--text);
+  font-size: 1.5em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+/* signature: blinking terminal cursor after the page's h1 */
+h1::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 0.15em;
+  background: var(--amber);
+  vertical-align: -0.15em;
+  animation: caret 1.1s steps(1) infinite;
+}
+@keyframes caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+h2 {
+  color: var(--text-dim);
+  font-size: 0.95em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 32px;
+}
+/* terminal-prompt marker in front of section headers */
+h2::before {
+  content: "$ ";
+  color: var(--green);
+}
+
+code {
+  font-family: var(--font-mono);
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--amber);
+  font-size: 0.9em;
+}
+
+/* generic "terminal window" panel treatment, applied to the pieces of
+   chrome every page already has: forms, banners, result/comment lists */
+form,
+.banner {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px 16px;
+  margin: 12px 0 20px;
+}
+form::before,
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red-dim);
+  box-shadow: 16px 0 0 var(--amber-dim), 32px 0 0 var(--green-dim);
+}
+
+/* index.html */
+nav {
+  display: flex;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+nav a {
+  margin-right: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+nav a:hover {
+  color: var(--amber);
+  background: var(--panel-raised);
+  text-decoration: none;
+}
+
+.banner {
+  background: linear-gradient(180deg, #1c1210, var(--panel));
+  border-color: var(--red-dim);
+  color: #f3c9c9;
+  padding-top: 22px;
+}
+.banner strong {
+  color: var(--red);
+}
+
+/* login.html */
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  width: 250px;
+  background: var(--bg);
+  border: 1px solid var(--border-bright);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+input::placeholder {
+  color: var(--text-dim);
+}
+input:focus {
+  border-color: var(--amber);
+}
+
+button {
+  font-family: var(--font-mono);
+  background: var(--amber);
+  color: #1a1300;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.05s ease, background 0.15s ease;
+}
+button:hover {
+  background: #ffbb52;
+}
+button:active {
+  transform: translateY(1px);
+}
+
+.error {
+  font-family: var(--font-mono);
+  color: var(--red);
+  background: rgba(255, 92, 92, 0.08);
+  border: 1px solid var(--red-dim);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.hint {
+  font-family: var(--font-mono);
+  color: var(--green);
+  background: rgba(79, 209, 165, 0.06);
+  border-left: 2px solid var(--green-dim);
+  font-size: 0.85em;
+  padding: 8px 10px;
+  margin-top: 16px;
+}
+.hint code {
+  color: var(--green);
+}
+
+/* search.html */
+input[type=text] {
+  padding: 8px 10px;
+  width: 300px;
+}
+
+.result,
+.comment {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 4px;
+}
+.result:hover,
+.comment:hover {
+  background: var(--panel-raised);
+}
+.result strong,
+.comment strong {
+  font-family: var(--font-mono);
+  color: var(--amber);
+}
+
+/* dashboard.html */
+textarea {
+  width: 100%;
+  height: 60px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border-bright);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--font-body);
+  resize: vertical;
+}
+textarea:focus {
+  border-color: var(--amber);
+}
+
+.admin-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  color: var(--red);
+  background: rgba(255, 92, 92, 0.1);
+  border: 1px solid var(--red-dim);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+}
+
+/* respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  h1::after {
+    animation: none;
+  }
+}

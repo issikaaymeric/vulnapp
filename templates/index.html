@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VulnLab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="banner"><strong>⚠ VulnLab</strong> — intentionally insecure. Local training use only.</div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/search">Search</a>
+    {% if user %}
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout ({{ user }})</a>
+    {% else %}
+      <a href="/login">Login</a>
+    {% endif %}
+  </nav>
+  <hr>
+  <h1>VulnLab Training App</h1>
+  <p>Seeded users (for practicing SQLi / brute force): <code>admin/admin123</code>, <code>alice/alicepassword</code>, <code>bob/hunter2</code>.</p>
+  <p>Try the <a href="/login">login form</a> or <a href="/search">search page</a>.</p>
+</body>
+</html>

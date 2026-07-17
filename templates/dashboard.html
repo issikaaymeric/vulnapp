@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - VulnLab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a href="/">&larr; Home</a>
+  <h1>Welcome, {{ user }}</h1>
+  {% if is_admin %}<p class="admin-tag">[ADMIN SESSION]</p>{% endif %}
+
+  <h2>Post a comment</h2>
+  <form method="POST" action="/comment">
+    <textarea name="body" placeholder="Say something..."></textarea>
+    <button type="submit">Post</button>
+  </form>
+
+  <h2>Comments</h2>
+  {% for c in comments %}
+    <div class="comment">
+      <strong>{{ c["username"] }}:</strong>
+      {# [VULN-2a] Stored XSS sink: `| safe` disables Jinja2 autoescaping,
+         so any HTML/JS in c["body"] (e.g. a <script> tag submitted via
+         /comment) executes in every visitor's browser exactly as if it
+         were part of this page's own code. This is the single most
+         common real-world XSS root cause: escaping was explicitly
+         turned off "to allow formatting" and never revisited.
+         [FIX-2a] Remove `| safe` and let Jinja2 autoescape:
+           <strong>{{ c["username"] }}:</strong> {{ c["body"] }}
+         If rich text is genuinely required, sanitize server-side with
+         an allowlist HTML sanitizer (e.g. `bleach.clean(body,
+         tags=["b","i","em"])`) BEFORE storage, and still autoescape
+         on output. #}
+      {{ c["body"] | safe }}
+    </div>
+  {% else %}
+    <p>No comments yet.</p>
+  {% endfor %}
+</body>
+</html>

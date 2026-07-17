@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - VulnLab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a href="/">&larr; Home</a>
+  <h1>Login</h1>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <form method="POST" action="/login">
+    <input type="text" name="username" placeholder="username" autocomplete="off">
+    <input type="password" name="password" placeholder="password" autocomplete="off">
+    <button type="submit">Login</button>
+  </form>
+  <p class="hint">Lab hint: this form builds SQL via string concatenation. Try
+    <code>username = admin' --</code> with any password.</p>
+</body>
+</html>

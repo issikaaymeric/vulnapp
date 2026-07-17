@@ -1,0 +1,29 @@
+services:
+  vulnlab:
+    build: .
+    container_name: vulnlab
+    # Bind ONLY to localhost on the host — not reachable from your LAN
+    # or the internet, even if your host firewall is permissive.
+    ports:
+      - "127.0.0.1:5000:5000"
+    # Isolated bridge network with no other services attached.
+    networks:
+      - vulnlab-net
+    # DB lives in a named volume so `docker compose down -v` fully resets
+    # the lab (drops the volume, next boot reseeds fresh data).
+    volumes:
+      - vulnlab-db:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - VULNLAB_DB_DIR=/app/data
+    restart: "no"
+
+networks:
+  vulnlab-net:
+    driver: bridge
+    internal: false   # set true to also block the container's own outbound
+                       # internet access (recommended once you're not
+                       # actively pip-installing new deps)
+
+volumes:
+  vulnlab-db:
